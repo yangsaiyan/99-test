@@ -25,7 +25,7 @@ For the swap token form:
 Just a normal swap token form :D
 
 For the backend part:
-You may refer to this, but it is just a simple backend. Nothing important.
+You may refer to this, but it is just a simple backend, no auth and http cookie. Nothing important.
 https://github.com/yangsaiyan/99-test-mock-api
 
 ## About question 3
