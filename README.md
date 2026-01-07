@@ -1,73 +1,35 @@
-# React + TypeScript + Vite
+This project includes Q1, Q2, and Q3.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## How to start
 
-Currently, two official plugins are available:
+1.  git clone **https://github.com/yangsaiyan/99-test.git**
+2.  npm install / yarn
+3.  npm run dev / yarn dev
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Location for all answers
 
-## React Compiler
+1.  https://github.com/yangsaiyan/99-test/blob/master/utils/sum.ts
+2.  https://github.com/yangsaiyan/99-test/blob/master/src/pages/2.tsx
+3.  https://github.com/yangsaiyan/99-test/blob/master/src/pages/3.tsx
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## About question 2
 
-## Expanding the ESLint configuration
+You can find two forms in /two
+For the mock data form, you may enter any value
+For mock address input:
+It is not necessary to enter a real address; it can be 0x0, 0, 1, or even a . (dot)
+After entering the address, you may select a token and enter a value, then press the [Add] button to add the token to your balance.
+Delay input is optional, but if you want to see the effect of the loading state, you may add it in "seconds".
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+For the swap token form:
+Just a normal swap token form :D
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+For the backend part:
+You may refer to this, but it is just a simple backend. Nothing important.
+https://github.com/yangsaiyan/99-test-mock-api
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## About question 3
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+I have added some mock data to display the answer. You can see the display at /three.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Stacks used: Vite - React with Ts, Tailwind, DaisyUI, Zustand, Tanstack Query, NestJs, Supabase, Digital Ocean, Vercel
