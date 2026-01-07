@@ -8,16 +8,20 @@ export default function GeneralToast() {
   const [toastArray, setToastArray] = useState<string[]>([]);
 
   useEffect(() => {
-    console.log(toastList);
     toastList.forEach((toast) => {
       const activedCoolDown = toastArray.includes(toast.id);
       if (activedCoolDown) return;
       setToastArray((prev) => [...prev, toast.id]);
       setTimeout(() => {
         removeToast(toast.id);
+        removeItemFromArray(toast.id);
       }, toast.duration);
     });
   }, [toastList]);
+
+  function removeItemFromArray(id: string) {
+    setToastArray((prev) => prev.filter((item) => item !== id));
+  }
 
   return (
     <div className="toast toast-top toast-end z-9999">
