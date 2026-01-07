@@ -41,7 +41,7 @@ function App() {
             path="/three"
             element={
               <GeneralLayout>
-                <Three />
+                <Three children={<></>} />
               </GeneralLayout>
             }
           />

@@ -3,7 +3,6 @@ import { GetTokens } from "../api/token/token.api";
 
 export const tokenKeys = {
   all: ["tokens"] as const,
-  byCurrency: (currency: string) => [...tokenKeys.all, currency] as const,
 };
 
 export const useTokenQuery = () => {

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://localhost:3000";
+const baseUrl = "https://nine-nine-test-mock-api-yprtj.ondigitalocean.app";
 
 export function ApiGet<T>(method: string): Promise<T> {
   return new Promise(async (resolve, reject) => {

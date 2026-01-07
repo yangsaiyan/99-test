@@ -19,7 +19,7 @@ export const useToastStore = create<ToastStoreProps>((set) => ({
   setToastList: (toastList: ToastProps[]) => set({ toastList }),
   addToast: (toast: Omit<ToastProps, "id">) =>
     set((state) => ({
-      toastList: [...state.toastList, { ...toast, id: generateToastId() }],
+      toastList: [...state.toastList, { ...toast, id: generateToastId(), duration: toast.duration || 3000 }],
     })),
   removeToast: (id: string) =>
     set((state) => ({

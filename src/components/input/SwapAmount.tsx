@@ -82,7 +82,7 @@ export default function SwapAmount(props: SwapAmountProps) {
               </div>
             )}
             <div className="w-full h-full flex flex-row justify-end items-center overflow-hidden whitespace-nowrap text-ellipsis">
-              <p className="w-3/5 text-right text-[16px] text-black/40">
+              <p className="w-4/5 text-right text-[16px] text-black/40">
                 Balance: {formatBalance(balance)}
               </p>
             </div>

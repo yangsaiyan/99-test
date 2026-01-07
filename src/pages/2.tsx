@@ -6,27 +6,48 @@ import { useWalletStore } from "../stores/walletStore";
 import type { Balance } from "../api/balance/balance.type";
 import { calcSwapAmount } from "../../utils/calculation";
 import {
-  useBalanceQuery,
+  balanceKeys,
+  useAddBalanceMutation,
+  useCreateWalletAddressMutation,
   useSwapBalanceMutation,
 } from "../queries/balance.queries";
-import { useTokenQuery } from "../queries/token.queries";
+import { tokenKeys } from "../queries/token.queries";
 import type { Token } from "../api/token/token.type";
 import { useToastStore } from "../stores/toastStore";
 import FullscreenLottiePlayer from "../components/player/FullscreenLottiePlayer";
 import swappingLottie from "../assets/lotties/swapping.json";
-import { AxiosError } from "axios";
-import DefaultSelect from "../components/select/DefaultSelect";
+import { useQueries } from "@tanstack/react-query";
+import { GetTokens } from "../api/token/token.api";
+import { GetBalance } from "../api/balance/balance.api";
+import MockDataForm from "../components/form/MockDataForm";
 
 export default function Two() {
-  const { getWalletAddress } = useWalletStore();
+  const { walletAddress } = useWalletStore();
   const { addToast } = useToastStore();
 
-  const { data: tokens, isLoading: isLoadingTokens } = useTokenQuery();
-  const { data: balances, isLoading: isLoadingBalances } = useBalanceQuery(
-    getWalletAddress()
-  );
-  const { mutateAsync: swapBalance, isPending: isLoadingSwapBalance } =
+  const [
+    { data: tokens = [] as Token[], isPending: isLoadingTokens = false },
+    { data: balances = [] as Balance[], isPending: isLoadingBalances = false },
+  ] = useQueries({
+    queries: [
+      {
+        // Get tokens
+        queryKey: tokenKeys.all,
+        queryFn: GetTokens,
+      },
+      {
+        // Get balances
+        queryKey: balanceKeys.byWallet(walletAddress),
+        queryFn: () => GetBalance(walletAddress),
+      },
+    ],
+  });
+
+  const { mutateAsync: SwapBalance, isPending: isLoadingSwapBalance } =
     useSwapBalanceMutation();
+  const { isPending: isLoadingAddBalance } = useAddBalanceMutation();
+  const { isPending: isLoadingCreateWalletAddress } =
+    useCreateWalletAddressMutation();
 
   const [payToken, setPayToken] = useState<Token>({ currency: "", price: 0 });
   const [receiveToken, setReceiveToken] = useState<Token>({
@@ -36,9 +57,6 @@ export default function Two() {
   const [payAmount, setPayAmount] = useState<string>("");
   const [receiveAmount, setReceiveAmount] = useState<string>("");
   const [tokenCurrencies, setTokenCurrencies] = useState<string[]>([]);
-  const [mockWalletAddress, setMockWalletAddress] = useState<string>("");
-  const [mockBalance, setMockBalance] = useState<string>("");
-  const [mockToken, setMockToken] = useState<string>("");
 
   const balance = useMemo(() => {
     return (
@@ -47,6 +65,20 @@ export default function Two() {
       )?.balance || 0
     );
   }, [balances, payToken.currency]);
+
+  const isLoading = useMemo(() => {
+    return (
+      isLoadingTokens ||
+      isLoadingBalances ||
+      isLoadingAddBalance ||
+      isLoadingCreateWalletAddress
+    );
+  }, [
+    isLoadingTokens,
+    isLoadingBalances,
+    isLoadingAddBalance,
+    isLoadingCreateWalletAddress,
+  ]);
 
   function onSwap() {
     const tempPayToken = payToken;
@@ -107,11 +139,11 @@ export default function Two() {
     }
 
     try {
-      await swapBalance({
+      await SwapBalance({
         fromToken: payToken.currency,
         toToken: receiveToken.currency,
         amount: payAmount,
-        walletAddress: getWalletAddress(),
+        walletAddress: walletAddress,
       });
       addToast({
         message: "Swap successful",
@@ -143,48 +175,27 @@ export default function Two() {
   }, [tokens]);
 
   return (
-    <div className="relative w-full h-full flex justify-center items-center">
+    <div className="relative w-full h-full flex flex-col justify-center items-center gap-[30px]">
+      {/* Swapping animation */}
       {isLoadingSwapBalance && (
         <FullscreenLottiePlayer lottieJson={swappingLottie} />
       )}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 px-[16px] py-[4px] w-full h-full max-w-[600px] max-h-[200px] flex flex-col justify-center items-center gap-[10px] bg-white rounded-[20px] border border-black border-solid">
-        <p className="text-[24px] text-black">Add mock data here</p>
-        <div className="w-full h-fit flex flex-row justify-between items-center gap-[10px]">
-          <input
-            type="text"
-            placeholder="Enter Wallet Address (mock) can be anything"
-            className="w-full h-full max-h-[44px] text-[24px] text-black text-left border border-black border-solid rounded-[20px] focus:outline-none"
-            value={mockWalletAddress}
-            onChange={(e) => setMockWalletAddress(e.target.value)}
-          />
-        </div>
-        <div className="w-full h-fit flex flex-row justify-between items-center gap-[10px]">
-          <input
-            type="text"
-            placeholder="Enter to add balance"
-            className="w-full h-full max-h-[44px] text-[24px] text-black text-left border border-black border-solid rounded-[20px] focus:outline-none"
-            value={mockBalance}
-            onChange={(e) => setMockBalance(e.target.value)}
-          />
-          <DefaultSelect
-            className="bg-white text-black border-black border-solid rounded-[20px]"
-            defaultSelection={tokenCurrencies[0]}
-            selection={tokenCurrencies}
-            setSelection={(token) => setMockToken(token)}
-          />
-        </div>
-      </div>
+      {/* Mock data form */}
+      <MockDataForm tokenCurrencies={tokenCurrencies} />
+      {/* Swap form */}
       <form
         className="mx-[16px] px-[20px] py-[15px] sm:px-[40px] sm:py-[25px] w-full min-w-[300px] max-w-[560px] h-[400px] grid grid-rows-10 rounded-[20px] bg-[#f0f0f0] transition-all ease-in-out duration-300"
         onSubmit={onSubmit}
       >
-        {isLoadingTokens || isLoadingBalances ? (
+        {/* Loading animation */}
+        {isLoading ? (
           <div className="row-span-8 flex flex-col justify-center items-center gap-[12px]">
             <div className="skeleton h-full w-full bg-gray-200 rounded-[20px]"></div>
             <div className="skeleton h-full w-full bg-gray-200 rounded-[20px]"></div>
           </div>
         ) : (
           <div className="relative row-span-8 flex flex-col justify-center items-center gap-[12px]">
+            {/* Pay amount input */}
             <SwapAmount
               index={0}
               amount={payAmount}
@@ -201,6 +212,7 @@ export default function Two() {
               selection={tokenCurrencies}
               setSelection={(token) => onSelectionChange(token, "pay")}
             />
+            {/* Swap button */}
             <button
               onClick={() => onSwap()}
               type="button"
@@ -208,6 +220,7 @@ export default function Two() {
             >
               <RxUpdate className="text-[16px] sm:text-[24px] text-white hover:rotate-180 transition-all duration-300" />
             </button>
+            {/* Receive amount input */}
             <SwapAmount
               index={1}
               amount={receiveAmount}
@@ -225,6 +238,7 @@ export default function Two() {
           </div>
         )}
         <div className="row-span-1" />
+        {/* Confirm swap button */}
         <button
           type="submit"
           className="btn w-full row-span-2 row-start-10 !bg-[#512ACC] !rounded-[20px]"

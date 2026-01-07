@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
 interface WalletStoreProps {
-  getWalletAddress: () => string;
+  walletAddress: string;
+  setWalletAddress: (walletAddress: string) => void;
 }
 
-export const useWalletStore = create<WalletStoreProps>(() => ({
-  getWalletAddress: () => {
-    return localStorage.getItem("walletAddress") || "";
-  },
+export const useWalletStore = create<WalletStoreProps>((set) => ({
+  walletAddress: "",
+  setWalletAddress: (walletAddress: string) => set({ walletAddress }),
 }));
