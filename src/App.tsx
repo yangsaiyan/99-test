@@ -21,6 +21,7 @@ function App() {
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <Routes>
+          <Route path="/" element={<GeneralLayout></GeneralLayout>} />
           <Route
             path="/one"
             element={
