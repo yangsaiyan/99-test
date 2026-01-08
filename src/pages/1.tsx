@@ -6,7 +6,7 @@ export default function One() {
   const availableMethods = ["One", "Two", "Three"];
   const [method, setMethod] = useState<string>("one");
   const [num, setNum] = useState<string>(
-    "Enter multiple values and add , to split them"
+    "Enter a number"
   );
   const [answer, setAnswer] = useState<number>(0);
 

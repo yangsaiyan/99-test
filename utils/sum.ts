@@ -7,7 +7,7 @@ var sum_to_n_a = function (n: number): number {
 };
 
 var sum_to_n_b = function (n: number): number {
-  return new Array(n).fill(0).reduce((acc: number, _: number, index: number) => acc + index + 1, 0);
+  return Array.from({ length: n }, (_, i) => i + 1).reduce((a, b) => a + b, 0);
 };
 
 var sum_to_n_c = function (n: number): number {
