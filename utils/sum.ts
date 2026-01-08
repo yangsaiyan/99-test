@@ -11,12 +11,8 @@ var sum_to_n_b = function (n: number): number {
 };
 
 var sum_to_n_c = function (n: number): number {
-  let acc = 0;
-  while (n >= 1) {
-    acc += n;
-    n--;
-  }
-  return acc;
+  if(n <= 1) return n;
+  return n + sum_to_n_c(n - 1);
 };
 
 export { sum_to_n_a, sum_to_n_b, sum_to_n_c };
