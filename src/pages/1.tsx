@@ -35,6 +35,7 @@ export default function One() {
     const value: string = e.target?.value;
     if (!value) {
       setNum("Enter a number");
+      setAnswer(0);
       return;
     }
     setNum(value);
